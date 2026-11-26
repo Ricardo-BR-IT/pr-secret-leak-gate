@@ -1,0 +1,31 @@
+name: 'PR Secret & API Key Leak Gate'
+description: 'Developers accidentally commit AWS keys, Stripe live tokens, GitHub PATs, and PEM private keys in PRs; native secret sca'
+author: 'Ricardo Vieira Forge Cloud'
+branding:
+  icon: 'shield'
+  color: 'red'
+inputs:
+  scan-path:
+    description: 'Directory to scan for leaked secrets'
+    required: false
+    default: '.'
+  entropy-threshold:
+    description: 'Minimum Shannon entropy for high-entropy token alerts'
+    required: false
+    default: '4.3'
+  fail-on-find:
+    description: 'Fail the workflow if secrets are detected'
+    required: false
+    default: 'true'
+  ignore-paths:
+    description: 'Comma-separated path substrings to ignore'
+    required: false
+    default: 'node_modules,.git,dist,coverage'
+outputs:
+  findings-count:
+    description: 'Total number of potential secret leaks detected'
+  passed:
+    description: 'true if no secrets found or fail-on-find is false'
+runs:
+  using: 'node20'
+  main: 'src/index.js'
